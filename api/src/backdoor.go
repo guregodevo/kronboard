@@ -9,7 +9,7 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"redigowrapper"
-	"scul"
+	"github.com/guregodevo/gosequel"
 	"time"
 )
 
@@ -23,7 +23,7 @@ func main() {
 	redisDB := redigowrapper.NewRedisDB("localhost", ":6379", "tcp")
 	fmt.Printf("Redis server - %v\n", redisDB.Url())
 
-    db := scul.DataB{"postgres", "localhost", "postgres", "postgres", "miranalytics", nil}
+    db := gosequel.DataB{"postgres", "localhost", "postgres", "postgres", "miranalytics", nil}
 	fmt.Printf("SQL Database - %v\n", db.Url())
 	flag.Parse()
 

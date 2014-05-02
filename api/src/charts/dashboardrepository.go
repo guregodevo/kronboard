@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"scul"
+	"github.com/guregodevo/gosequel"
 	"time"
 )
 
 type DashboardRepository struct {
-	Db *scul.DataB
+	Db *gosequel.DataB
 }
 
 type Dashboard struct {

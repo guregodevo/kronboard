@@ -5,12 +5,12 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"scul"
+	"github.com/guregodevo/gosequel"
 	"time"
 )
 
 type AccountRepository struct {
-	Db *scul.DataB
+	Db *gosequel.DataB
 }
 
 type Account struct {
