@@ -9,7 +9,7 @@ import (
 )
 
 type ChartRepository struct {
-	Db *scul.DataB
+	Db *gosequel.DataB
 }
 
 type Chart struct {

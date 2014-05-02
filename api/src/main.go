@@ -8,13 +8,13 @@ import (
 	"log"
 	"redigowrapper"
 	"github.com/guregodevo/pastis"
-	"scul"
+	"github.com/guregodevo/gosequel"
 )
 
 func main() {
 	redisDB := redigowrapper.NewRedisDB("localhost", ":6379", "tcp")
 	fmt.Printf("Redis server - %v\n", redisDB.Url())
-	sqlDB := scul.DataB{"postgres", "localhost", "postgres", "postgres", "miranalytics", nil}
+	sqlDB :=gosequel .DataB{"postgres", "localhost", "postgres", "postgres", "miranalytics", nil}
 	fmt.Printf("SQL Database - %v\n", sqlDB.Url())
 
 	nativedb := sqlDB.Opendb()
