@@ -1,0 +1,4 @@
+kronboard
+=========
+
+Kronboard : Multidimensional Analytics
