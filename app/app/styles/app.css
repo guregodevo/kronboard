@@ -1,0 +1,147 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+	padding-top: 50px;
+	padding-bottom: 20px;
+	color: #122334;
+	font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	letter-spacing: 0px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.navbar-inverse {
+	background-color: #3C8DC5;
+	border-color: #3C8DC5;
+}
+
+.brand-name {
+	color: white;
+	font-weight: bold;
+	font-family: "Helvetica Neue", sans-serif;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+	color: #E8E8E8;
+	font-weight: bold;
+}
+
+div.panel.price strong {
+	font-size: x-large;
+	color: #123344;
+}
+
+div.panel.price.feature {
+	font-size: medium;
+	color: #123344;
+}
+
+.price .panel-heading {
+	color: white;
+	background: #3C8DC5;
+	/*background-color: #808080;*/
+}
+
+/*.price .table td {
+ border: 0px;
+ }*/
+
+.price h4 {
+	font-family: "Helvetica", sans-serif;
+	font-size: 18px;
+	color: white;
+	font-weight: bold;
+}
+
+.price h5 {
+	font-family: "Helvetica", sans-serif;
+	font-size: 18px;
+	color: #123344;
+}
+
+.price h3 {
+	font-size: 24px;
+	line-height: 24px;
+	font-weight: bold;
+	margin: 5px 0px;
+	color: #123344;
+}
+
+.table-features td {
+	border: 5px solid white !important;
+	padding: 2px;
+	background-color: #E9F2F9;
+	color: #122334;
+}
+
+.blue-1 {
+	background-color: #3C8DC5;
+}
+
+.blue-2 {
+	background-color: #6FB7E9;
+}
+
+.blue-3 {
+	background-color: #B2D1E5;
+}
+
+.blue-4 {
+	background-color: #E9F2F9;
+}
+
+.blue-5 {
+	background-color: #FFFFFF;
+}
+
+/*.sky_pix {
+ background-color: #3C8DC5;
+ background: url('../images/DSC_0728_o.jpg') no-repeat center center fixed;
+ -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+ background-size: cover;
+ }*/
+
+.login {
+	background: #29638f;
+	width: 370px;
+	margin-top: 50px;
+	border-top: 10px solid #0e4c7c;
+	padding: 40px 35px;
+	color: white;
+}
+
+.login h1{
+	padding-bottom: 10px;
+}
+
+.login input[type=text], .login input[type=password], .login input[type=email] {
+	width: 95%;
+	height: 40px;
+	font-weight: 100;
+	padding: 5px;
+}
+
+.jumbotron {
+	background-color: #3C8DC5;
+}
+
+.jumbotron h1, .jumbotron .h1 {
+	color: #FFFFFF;
+}
+
+.jumbotron p {
+	color: #FFFFFF;
+	padding-top: 10px;
+}
+
+.btn-primary {
+	color: #3C8DC5;
+	font-size: x-large;
+	background-color: white;
+}
+
+.btn-price {
+	color: white;
+	font-size: x-large;
+	background-color: #3C8DC5;
+}

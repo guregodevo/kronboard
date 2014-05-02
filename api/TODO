@@ -1,0 +1,22 @@
+Crawler : 
+- Use blacklist filter using bloomfilter
+- Go local negotiation (request.addHeader("Accept-Language", "en");)
+- Filter by mimetipe
+- generate CSV file containing the url and theirs outlinks
+- use log package instead
+- Use parse
+- pagerank computing
+- filter by content . Must a page with products
+
+Scraper : 
+- scrape one page with products
+- generate CSV : productId, product description, product URL, product price
+
+Machine learning : 
+- Clustering : compute Product category based on description
+- Do some linear regression
+
+Front-end : 
+- Get alert when a product price is below some prices
+
+

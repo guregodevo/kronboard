@@ -1,0 +1,23 @@
+<ng-include src="'views/inc/menu_dashboard.html'"></ng-include>
+
+<div>
+  <h3>{{type}} chart</h3>		
+  <div class="row">
+	<div class="col-md-1">
+		
+	</div>
+	<div class="col-md-6">
+		<div style="height:300px;width: 600px;background-color: white;">
+			<div mychart chartid="{{id}}" type="{{type}}" readonly="{{readonly}}"></div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		TODO Select Query<br/>
+		Color<br/>
+		Refresh interval: {{chart.Interval}}<br/>
+		Id: {{id}}<br/>
+	</div>
+  </div>
+</div>
+
+

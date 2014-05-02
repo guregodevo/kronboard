@@ -1,0 +1,35 @@
+<ng-include src="'views/inc/menu.html'"></ng-include>
+
+
+<div class="container">
+	<div class="login center-block" ng-controller="LoginCtrl">
+		<h1>Login</h1>
+		<span class="label label-info" >{{msg}}</span>
+
+		<div>
+			<form role="form" ng-submit="submit()">
+				<div class="form-group">
+					<label for="email">Email address</label>
+					<input ng-model="email" ng-required="true" type="email" ng-maxlenght="50" class="form-control" placeholder="Enter your email" autocomplete="true" />
+					
+				</div>
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input ng-model="password" ng-required="true" ng-minlenght="8" ng-maxlenght="15" type="password" class="form-control" placeholder="Enter your Password" autocomplete="false"/>
+				</div>
+				<button type="submit" class="btn btn-primary">
+					START
+				</button>
+			</form>
+		</div>
+		</div>
+
+		<hr>
+
+		<footer>
+			<p>
+				&copy; HeaperU 2014
+			</p>
+		</footer>
+	</div>
+	<!-- /container -->

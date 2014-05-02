@@ -1,0 +1,78 @@
+.gridster-container {
+	margin: auto;
+        background-color:   lightgrey;
+        max-width: 95%;
+}
+
+.gridster .gridster-item {
+	-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.gridster .gridster-item {
+	-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	color: #004756;
+}
+
+.gridster .gridster-item {
+	background: #ffffff;
+	padding: 5px;
+}
+
+.event {
+	background-image: url('../images/menu/iconmonstr-location-3-icon-16-w.png');
+	background-repeat: no-repeat;
+	padding-left: 20px; /* width of the image plus a little extra padding */
+	display: block; /* may not need this, but I've found I do */
+}
+
+.funnel {
+	background-image: url('../images/menu/iconmonstr-filter-5-icon-16-w.png');
+	background-repeat: no-repeat;
+	padding-left: 20px; /* width of the image plus a little extra padding */
+	display: block; /* may not need this, but I've found I do */
+}
+
+.dashboard {
+	background-image: url('../images/menu/iconmonstr-dashboard-5-icon-16-w.png');
+	background-repeat: no-repeat;
+	padding-left: 20px; /* width of the image plus a little extra padding */
+	display: block; /* may not need this, but I've found I do */
+}
+
+.settings {
+	background-image: url('../images/menu/iconmonstr-gear-9-icon-16-w.png');
+	background-repeat: no-repeat;
+	padding-left: 20px; /* width of the image plus a little extra padding */
+	display: block; /* may not need this, but I've found I do */
+}
+
+.menudashboard {
+	background-color: white;
+	text-decoration: none;
+	margin: 0px;
+	padding: 5px;
+}
+
+.menudashboard li {
+	font-weight: bold;
+	border-width: 5px;
+	border-color: #3C8DC5;
+}
+
+.chart {
+	border : 0;
+	padding: 5px 5px 5px 5px;
+}
+    
+.graphbtn {
+	font-size: 21px;
+	font-weight: bold;
+	line-height: 1;
+	color: #000000;
+	text-shadow: 0 1px 0 #ffffff;
+	opacity: 0.2;
+	z-index:1;
+	filter: alpha(opacity=20);
+}
+
