@@ -132,7 +132,7 @@ func main() {
 			"col" : 3,
 			"type" : "bar",
 		}
-		data := []map[string]interface{} {c1,c2, c3, c4, c5};
+		data := []map[string]interface{} {c1,c2, c3, c4, c5}
 		id, errD := repoDashboard.Create("MyDashboard", data)
 		if errD != nil {
 			log.Fatal(errD)

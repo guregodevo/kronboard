@@ -24,7 +24,7 @@ func (e *DashboardsError) Error() string {
 	return fmt.Sprintf("at %v, %s", e.When, e.What)
 }
 
-func (api DashboardsResource) GET(values url.Values) (int, interface{}) {
+func (api DashboardsResource) Get(values url.Values) (int, interface{}) {
 	id := values.Get("id")
 
 	if id == "" {
@@ -50,7 +50,7 @@ func (api DashboardsResource) GET(values url.Values) (int, interface{}) {
 	return http.StatusOK, dashboard.Charts
 }
 
-func (api DashboardsResource) PUT(values url.Values, charts []map[string]interface{}) (int64, interface{}) {
+func (api DashboardsResource) Put(values url.Values, charts []map[string]interface{}) (int64, interface{}) {
 		id := values.Get("id")
 		fmt.Printf("Hey Ho %v ",charts)
 		if id == "" {
@@ -72,7 +72,7 @@ func (api DashboardsResource) PUT(values url.Values, charts []map[string]interfa
 		return http.StatusOK, nil
 }
 
-func (api DashboardsResource) DELETE(values url.Values) (int, interface{}) {
+func (api DashboardsResource) Delete(values url.Values) (int, interface{}) {
 	data := []map[string]interface{} {};
 	return http.StatusOK, data
 }
