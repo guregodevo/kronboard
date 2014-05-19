@@ -1,0 +1,43 @@
+<ng-include src="'views/inc/menu_dashboard.html'"></ng-include>
+
+<div class="container">
+	<div class="login center-block" ng-controller="NewChartCtrl">
+		<h1>New dashboard {{dashboardid}}</h1>
+		<span class="label label-info" >{{msg}}</span>
+
+		<div>
+			<form role="form" ng-submit="submit()">
+				<div class="form-group">
+					<label for="description">Description</label>
+					<input ng-model="title" ng-required="true" type="text" ng-maxlenght="50" class="form-control" placeholder="Enter your description" autocomplete="true" />
+				</div>
+
+				<div class="input-group">
+			      <span class="input-group-addon">
+			        <input type="radio" ng-model="type" name="type" ng-value="bar" ng-required="true" placeholder="Enter your type">bar
+			      </span>
+			      <span class="input-group-addon">
+			        <input type="radio" ng-model="type" name="type" ng-value="circle" ng-required="true" placeholder="Enter your type">circle
+			      </span>
+			      <span class="input-group-addon">
+			        <input type="radio" ng-model="type" name="type" ng-value="line" ng-required="true" placeholder="Enter your type">line
+			      </span>            
+			    </div><!-- /input-group -->
+				<br>			    
+				<button type="submit" class="btn btn-primary">
+					CREATE
+				</button>
+			</form>
+		</div>
+		</div>
+
+		<hr>
+
+		<footer>
+			<p>
+				&copy; HeaperU 2014
+			</p>
+		</footer>
+	</div>
+	<!-- /container -->
+</div>

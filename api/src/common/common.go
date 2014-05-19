@@ -2,6 +2,6 @@ package common
 
 
 type Point struct {
-	X int,
+	X int
 	Y int
 }

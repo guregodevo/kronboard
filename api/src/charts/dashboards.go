@@ -10,7 +10,6 @@ import (
 	"log"
 )
 
-
 type DashboardsResource struct{
 	Repository *DashboardRepository
 }
@@ -50,9 +49,9 @@ func (api DashboardsResource) Get(values url.Values) (int, interface{}) {
 	return http.StatusOK, dashboard.Charts
 }
 
-func (api DashboardsResource) Put(values url.Values, charts []map[string]interface{}) (int64, interface{}) {
+func (api DashboardsResource) Put(values url.Values, dashboard Dashboard) (int64, interface{}) {
 		id := values.Get("id")
-		fmt.Printf("Hey Ho %v ",charts)
+		fmt.Printf("Hey Ho %v ",dashboard)
 		if id == "" {
 	        err := &DashboardsError{time.Now(), "Missing dashboard id parameter"}		
 			return http.StatusBadRequest, pastis.ErrorResponse(err)
@@ -63,8 +62,8 @@ func (api DashboardsResource) Put(values url.Values, charts []map[string]interfa
 	        err := &DashboardsError{time.Now(), "Missing dashboard id parameter type"}		
 			return http.StatusBadRequest, pastis.ErrorResponse(err)
 		}
-		fmt.Printf("Hey Ho %v %v",idInt, charts)
-		err := api.Repository.Update(idInt, charts)
+		
+		err := api.Repository.Update(idInt, dashboard.Width, dashboard.Height, dashboard.Charts)
 		if err != nil {
 			log.Fatal("Could not get dashboard '%v' \n", id, err)
 			return http.StatusInternalServerError, &DashboardsError{time.Now(), "Technical error while getting dashboard record"}

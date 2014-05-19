@@ -63,9 +63,9 @@ func main() {
 		db.Exec("CREATE TABLE USER_ACCOUNT(ID SERIAL PRIMARY KEY NOT NULL, EMAIL VARCHAR(50) NOT NULL, COMPANY_NAME VARCHAR(50) NOT NULL, PASSWORD VARCHAR(15) NOT NULL, CREATED TIMESTAMP NOT NULL);")
 		//db.Exec("CREATE TABLE METRICS( time timestamp NOT NULL, values HSTORE );")
 		fmt.Printf("creating DASHBOARD_ACCOUNT... \n")
-		db.Exec("CREATE TABLE DASHBOARD(ID SERIAL, NAME VARCHAR(100), CHARTS hstore[], CREATED TIMESTAMP NOT NULL );")
+		db.Exec("CREATE TABLE DASHBOARD(ID SERIAL, WIDTH SMALLINT, HEIGHT SMALLINT, NAME VARCHAR(100), CHARTS hstore[], CREATED TIMESTAMP NOT NULL );")
 		fmt.Printf("creating CHART_ACCOUNT... \n")
-		db.Exec("CREATE TABLE CHART(ID SERIAL, INTERVAL SMALLINT, TYPE VARCHAR(100), CREATED TIMESTAMP NOT NULL );")
+		db.Exec("CREATE TABLE CHART(ID SERIAL, INTERVAL SMALLINT, TYPE VARCHAR(100), DESCRIPTION VARCHAR(100), CREATED TIMESTAMP NOT NULL );")
 
 
 	case "d":
@@ -102,12 +102,12 @@ func main() {
 			"sizeX" : 1,
 			"sizeY" : 0,
 			"row" : 0,
-			"col" : 5,
+			"col" : 3,
 			"type" : "circle",
 		}
 
 		c3 := map[string]interface{} {
-			"id" : 1,
+			"id" : 3,
 			"sizeX" : 2,
 			"sizeY" : 0,
 			"row" : 3,
@@ -116,8 +116,8 @@ func main() {
 		}
 
 		c4 := map[string]interface{} {
-			"id" : 1,
-			"sizeX" : 6,
+			"id" : 4,
+			"sizeX" : 5,
 			"sizeY" : 2,
 			"row" : 2,
 			"col" : 0,
@@ -125,7 +125,7 @@ func main() {
 		}
 
 		c5 := map[string]interface{}  {
-			"id" : 1,
+			"id" : 5,
 			"sizeX" : 2,
 			"sizeY" : 1,
 			"row" : 1,
@@ -133,15 +133,15 @@ func main() {
 			"type" : "bar",
 		}
 		data := []map[string]interface{} {c1,c2, c3, c4, c5}
-		id, errD := repoDashboard.Create("MyDashboard", data)
+		id, errD := repoDashboard.Create("MyDashboard", 6, 5, data)
 		if errD != nil {
 			log.Fatal(errD)
 		}
 		log.Printf("Created Dashboard [id=%v]", id)
 
 		repoChart := &charts.ChartRepository{&db}
-		repoChart.Create(2,"line")
-		repoChart.Create(1,"bar")
+		repoChart.Create(2,"line","My Line chart")
+		repoChart.Create(1,"bar", "My Bar chart")
 
 
 

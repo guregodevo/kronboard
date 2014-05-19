@@ -35,15 +35,20 @@ func main() {
 	chartsResource := new(charts.ChartsResource)
 	chartsResource.Repository = &charts.ChartRepository{&sqlDB}
 
+	dashboardChartsResource := new(charts.DashboardChartsResource)
+	dashboardChartsResource.ChartRepository = &charts.ChartRepository{&sqlDB}
+	dashboardChartsResource.DashboardRepository = &charts.DashboardRepository{&sqlDB}
+
 	var api = pastis.NewAPI()
 	api.AddFilter(pastis.LoggingFilter)
 	api.AddFilter(pastis.CORSFilter)
-	api.AddResource(authResource, "/authenticate")
-	api.AddResource(metricsResource, "/metrics")
-	api.AddResource(chartsResource, "/charts")
-	api.AddResource(dashboardsResource, "/dashboards")
+	api.AddResource("/authenticate", authResource)
+	api.AddResource("/metrics", metricsResource)
+	api.AddResource("/charts", chartsResource)
+	api.AddResource("/dashboards", dashboardsResource)
+	api.AddResource("/dashboards/:dashboardid/chart", dashboardChartsResource)
 
-	log.Printf("About to listen on 3000. Go to http://127.0.0.1:3000/")
+	log.Printf("Listening on 3000. Go to http://127.0.0.1:3000/")
 	err := api.Start(3000)
 	if err != nil {
 		log.Fatal(err)

@@ -50,6 +50,21 @@ module.factory('ChartApi', ['$q', '$http',
 function($q, $http) {
 
 	//Get a collection of charts
+	function addchart(dashboardid, type, title) {
+		var deferred = $q.defer();
+		var chart = {
+			"Description" : title,
+			"Type" : "circle"
+		};	
+		$http.post(server + '/dashboards/'+ dashboardid +'/chart', chart).success(function(data, status) {
+			deferred.resolve(data);
+		}).error(function(data, status) {
+			deferred.reject(status);
+		});
+		return deferred.promise;
+	}
+
+	//Get a collection of charts
 	function getchart(id) {
 		var deferred = $q.defer();
 		$http.get(server + '/charts?id='+id, {}).success(function(data, status) {
@@ -73,7 +88,8 @@ function($q, $http) {
 
 	return {
 		getcharts : getcharts,
-		getchart : getchart
+		getchart : getchart,
+		addchart : addchart
 	};	
 }]);
 

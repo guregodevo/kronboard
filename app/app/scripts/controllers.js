@@ -51,7 +51,25 @@ function($scope, $http, $window, AuthApi, $location) {
 	$location.path('/login');
 }]);
 
-offlineControllers.controller('ChartCtrl', ['$scope', '$routeParams', '$http', '$window', 'ChartApi', '$location',
+offlineControllers.controller('NewChartCtrl', ['$scope', '$routeParams', '$http', '$window', 'ChartApi', '$location',
+function($scope, $routeParams, $http, $window, ChartApi, $location) {
+	console.log("New chart "+ $routeParams.dashboardid);
+	$scope.dashboardid = $routeParams.dashboardid;
+	$scope.readonly = true;
+
+	$scope.submit = function() {
+		
+	ChartApi.addchart($scope.dashboardid, $scope.type, $scope.title).then(function(data) {//success
+			console.log('Chart added' + data.id);
+			console.log('go to dashboards page');
+			$location.path('/dashboards');
+		}, function(status) {//failed
+			console.log('Chart could not be added');
+		});
+	};
+}]);
+
+offlineControllers.controller('EditChartCtrl', ['$scope', '$routeParams', '$http', '$window', 'ChartApi', '$location',
 function($scope, $routeParams, $http, $window, ChartApi, $location) {
 	console.log("editing " + $routeParams.id);
 	$scope.id = $routeParams.id;

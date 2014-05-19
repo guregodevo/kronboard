@@ -56,10 +56,14 @@ function($routeProvider, $httpProvider) {
 		auth : true,
 		templateUrl : 'views/dashboards.html',
 		controller : 'SignOutCtrl'
+	}).when('/dashboard/:dashboardid/chart/', {
+		auth : false,
+		templateUrl : 'views/newchart.html',
+		controller : 'NewChartCtrl'
 	}).when('/chart/:id/:type/', {
 		auth : false,
 		templateUrl : 'views/chart.html',
-		controller : 'ChartCtrl'
+		controller : 'EditChartCtrl'
 	}).when('/dashboards', {
 		auth : false,
 		templateUrl : 'views/dashboards.html',
