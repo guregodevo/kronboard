@@ -49,14 +49,28 @@ function($q, $http) {
 module.factory('ChartApi', ['$q', '$http',
 function($q, $http) {
 
-	//Get a collection of charts
+	//Add a chart to  a collection of charts
 	function addchart(dashboardid, type, title) {
 		var deferred = $q.defer();
 		var chart = {
 			"Description" : title,
 			"Type" : "circle"
 		};	
-		$http.post(server + '/dashboards/'+ dashboardid +'/chart', chart).success(function(data, status) {
+		$http.post(server + '/dashboards/'+ dashboardid +'/chart/new', chart).success(function(data, status) {
+			deferred.resolve(data);
+		}).error(function(data, status) {
+			deferred.reject(status);
+		});
+		return deferred.promise;
+	}
+
+	//Delete a chart from  a collection of charts
+	function deletechart(dashboardid, id) {
+		var deferred = $q.defer();
+		var chart = {
+			"Id" : id
+		};
+		$http.delete(server + '/dashboards/'+ dashboardid +'/chart/'+id, chart).success(function(data, status) {
 			deferred.resolve(data);
 		}).error(function(data, status) {
 			deferred.reject(status);
@@ -89,7 +103,8 @@ function($q, $http) {
 	return {
 		getcharts : getcharts,
 		getchart : getchart,
-		addchart : addchart
+		addchart : addchart,
+		deletechart	: deletechart
 	};	
 }]);
 

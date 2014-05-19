@@ -4,7 +4,7 @@
 	<div gridster="gridsterOpts" class="gridster-container">
 		<ul>
 			<li gridster-item="chart" ng-repeat="chart in charts">
-					<div mychart chartid="{{chart.id}}" on-close="hideDialog()" type="{{chart.type}}" readonly="{{readonly}}"></div>
+					<div mychart chartid="{{chart.id}}" dashboardid="{{dashboardid}}" on-close="hideDialog()" type="{{chart.type}}" readonly="{{readonly}}"></div>
 			</li>
 		</ul>
 	</div>

@@ -46,7 +46,7 @@ func main() {
 	api.AddResource("/metrics", metricsResource)
 	api.AddResource("/charts", chartsResource)
 	api.AddResource("/dashboards", dashboardsResource)
-	api.AddResource("/dashboards/:dashboardid/chart", dashboardChartsResource)
+	api.AddResource("/dashboards/:dashboardid/chart/:chartid", dashboardChartsResource)
 
 	log.Printf("Listening on 3000. Go to http://127.0.0.1:3000/")
 	err := api.Start(3000)

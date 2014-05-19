@@ -1,14 +1,15 @@
 'use strict';
 
-angular.module('chart', []).directive('mychart', ['$location','$interval', '$timeout', '$window', '$rootScope',
-function($location, $interval, $timeout, $window, $rootScope) {
+angular.module('chart', []).directive('mychart', ['$location','$interval', '$timeout', '$window', '$rootScope','ChartApi',
+function($location, $interval, $timeout, $window, $rootScope, ChartApi) {
 	return {
 		restrict : 'A',
 		scope : {
+			dashboardid : '@',
 			chartid : '@',
 			readonly: '@',
 			type : '@',
-			close : '&onClose',
+			//close : '&onClose',
 			onReady : '&',
 			select : '&'
 		},
@@ -38,6 +39,24 @@ function($location, $interval, $timeout, $window, $rootScope) {
  
 			$scope.refresh = function() {
 				updateTime();
+			};
+
+			$scope.close = function() {
+		      $timeout(function () {
+		       console.log('chart id' + $scope.chartid );
+			   console.log('dashboard id ' + $scope.dashboardid );
+			   ChartApi.deletechart($scope.dashboardid, $scope.chartid).then(function(data) {//success
+					console.log('Deleted chart');
+					chart.clear();
+					$elm.hide();
+					$elm.find("div").hide();
+					$elm.parent().hide();	
+				}, function(status) {
+					//failed
+					$scope.msg = 'Invalid chart delete';
+					console.log('Get charts service failed');
+				});
+		      }, 200);
 			};
 
 			$scope.edit = function() {

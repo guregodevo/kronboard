@@ -88,6 +88,7 @@ function($scope, $routeParams, $http, $window, ChartApi, $location) {
 offlineControllers.controller('DashboardCtrl', ['$scope', '$http', '$timeout', 'ChartApi',
 function($scope, $http, $timeout, ChartApi) {
 	//$scope.readonly = false;
+	$scope.dashboardid = 1;
 
 	$scope.gridsterOpts = {
 		margins : [5, 5],
@@ -110,26 +111,8 @@ function($scope, $http, $timeout, ChartApi) {
 	});
 
 
-	$scope.hideDialog = function () {
-      $timeout(function () {
-       console.log('hide dialog');
-      }, 200);
-    };
+	//$scope.hideDialog = function () {
+    //};
 	
-	//TODO Add remove item
-	/*	$scope.$watch('charts', function(newItems, oldItems) {
-	 // one of the items changed
-	 console.log('change detected');
-	 for (var i = 0, j = newItems.length; i < j; i++) {
-	 if (!angular.equals(newItems[i], oldItems[i])) {
-	 if (newItems[i].sizeX != oldItems[i].sizeX || newItems[i].sizeY != oldItems[i].sizeY) {
-	 console.log('changed size ' + i + newItems[i].type);
-	 }
-	 if (newItems[i].row != oldItems[i].row || newItems[i].col != oldItems[i].col) {
-	 console.log('changed position ' + i + newItems[i].type);
-	 }
-	 }
-	 };
-	 }, true);*/
 
 }]);
