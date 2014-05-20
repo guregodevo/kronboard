@@ -28,7 +28,7 @@ func ToInt64(t interface{}) int64 {
 func ToInt(t interface{}) int {
 	switch t := t.(type) {
 	default:
-		return t.(int)	
+		return t.(int)
 	case int:
 	    return t
 	case int64:
@@ -38,18 +38,24 @@ func ToInt(t interface{}) int {
 
 func ToRect(json map[string]interface{}) *stripack.Rect {
 	res := &stripack.Rect{}
-	res.X = ToInt(json["col"])
-	res.Y = ToInt(json["row"])
-	res.H = ToInt(json["sizeY"])
-	res.W = ToInt(json["sizeX"])
-	res.Id = ToInt64(json["id"])
-	return res
+	if len(json) > 0 {
+		res.X = ToInt(json["col"])
+		res.Y = ToInt(json["row"])
+		res.H = ToInt(json["sizeY"])
+		res.W = ToInt(json["sizeX"])
+		res.Id = ToInt64(json["id"])
+		return res
+	}
+	return nil
 }
 
 func ToRects(json []map[string]interface{}) []*stripack.Rect {
 	res := []*stripack.Rect{}
 	for _, rectJson := range json {
-		res = append(res, ToRect(rectJson))   
+		rect := ToRect(rectJson)
+		if rect != nil {
+			res = append(res, rect)
+		}
 	}
 	return res
 }

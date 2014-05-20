@@ -56,7 +56,7 @@ function($q, $http) {
 			"Description" : title,
 			"Type" : "circle"
 		};	
-		$http.post(server + '/dashboards/'+ dashboardid +'/chart/new', chart).success(function(data, status) {
+		$http.post(server + '/dashboards/'+ dashboardid +'/chart/', chart).success(function(data, status) {
 			deferred.resolve(data);
 		}).error(function(data, status) {
 			deferred.reject(status);
@@ -67,10 +67,7 @@ function($q, $http) {
 	//Delete a chart from  a collection of charts
 	function deletechart(dashboardid, id) {
 		var deferred = $q.defer();
-		var chart = {
-			"Id" : id
-		};
-		$http.delete(server + '/dashboards/'+ dashboardid +'/chart/'+id, chart).success(function(data, status) {
+		$http.delete(server + '/dashboards/'+ dashboardid +'/chart/'+id).success(function(data, status) {
 			deferred.resolve(data);
 		}).error(function(data, status) {
 			deferred.reject(status);

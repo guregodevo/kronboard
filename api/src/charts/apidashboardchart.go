@@ -40,11 +40,18 @@ func (resource DashboardChartsResource) validate(id string) (*Dashboard, int64, 
 func (resource *DashboardChartsResource) Post(values url.Values, chart Chart) (int64, interface{}) {
 	id := values.Get("dashboardid")
 
-
 	dashboard, status, msg := resource.validate(id)
 	if msg != "" {
 		error := &ChartsError{time.Now(), msg}
 		return status, pastis.ErrorResponse(error)	
+	}
+
+	if chart.Type == "" {
+		return http.StatusBadRequest, "Missing type"
+	}
+
+	if chart.Description == "" {
+		return http.StatusBadRequest, "Missing description"
 	}
 
 	//Create Chart

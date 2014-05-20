@@ -60,6 +60,9 @@ function($scope, $routeParams, $http, $window, ChartApi, $location) {
 	$scope.submit = function() {
 		
 	ChartApi.addchart($scope.dashboardid, $scope.type, $scope.title).then(function(data) {//success
+			if ($scope.type == "") {
+				$scope.type = "circle";
+			}
 			console.log('Chart added' + data.id);
 			console.log('go to dashboards page');
 			$location.path('/dashboards');
