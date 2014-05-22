@@ -92,30 +92,76 @@ offlineControllers.controller('DashboardCtrl', ['$scope', '$http', '$timeout', '
 function($scope, $http, $timeout, ChartApi) {
 	//$scope.readonly = false;
 	$scope.dashboardid = 1;
+	$scope.dragging = true;
+	$scope.changeditems= [];
 
 	$scope.gridsterOpts = {
 		margins : [5, 5],
 		draggable : {
-			enabled : true
+			enabled : true,
+			start: function(event, ui, $elm) { 
+				$scope.dragging = false;
+			},
+			stop: function(event, ui, $elm) { 
+				$scope.dragging = true;
+				var e = $elm.find("div")[0];
+				if (e) {
+					var chartid = e.getAttribute('chartid');
+					var dashboardid = e.getAttribute('dashboardid');
+					if (chartid && dashboardid) {
+						console.log('changed item:' + $scope.changeditems.length);
+						var item; 
+					    for (var i = 0; i < $scope.changeditems.length; i++) {
+							if ($scope.changeditems[i].id == chartid) {
+								item = $scope.changeditems[i];
+							}
+					    }
+						$scope.changeditems = [];
+					}
+					if (item) {
+						//console.log("changed item: ");
+						//console.log(item);
+					    ChartApi.putchart(dashboardid, chartid, item.sizeX, item.sizeY, item.row, item.col).then(function(data) {//success
+							console.log('Put chart');
+							}, function(status) {
+								console.log('Put chart service failed');
+						});
+					}
+				}
+				 
+			} 
 		},
 		resizable : {
 			enabled : true
 		}
 	};
 
+	$scope.$watch('charts', function(oldItems, newItems) {
+	   if (newItems) {
+	   	   var len = newItems.length;
+		   for (var i = 0; i < len; i++) {
+	   			if (newItems && oldItems && $scope.dragging != true ) {
+					if (newItems[i].sizeX != oldItems[i].sizeX || newItems[i].sizeY != oldItems[i].sizeY) {
+						$scope.changeditems.push(oldItems[i]);
+					}
+					if (newItems[i].col != oldItems[i].col || newItems[i].row != oldItems[i].row) {
+						$scope.changeditems.push(oldItems[i]);
+					}
+				}
+		    }
+	   }
+	}, true);
+
 	// these map directly to gridsterItem options
 	ChartApi.getcharts().then(function(data) {//success
 			$scope.charts = data;
+
 			console.log('Got chart:' + data);
 		}, function(status) {
 			//failed
 			$scope.msg = 'Invalid charts';
 			console.log('Get charts service failed');
 	});
-
-
-	//$scope.hideDialog = function () {
-    //};
 	
 
 }]);

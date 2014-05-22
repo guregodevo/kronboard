@@ -1,6 +1,9 @@
 package charts
 
-import "github.com/guregodevo/stripack"
+import (
+"github.com/guregodevo/stripack"
+"strconv"
+)
 
 func ToJSON(chart Chart, rect *stripack.Rect) map[string]interface{} {
 	json := map[string]interface{} {
@@ -17,11 +20,20 @@ func ToJSON(chart Chart, rect *stripack.Rect) map[string]interface{} {
 func ToInt64(t interface{}) int64 {
 	switch t := t.(type) {
 	default:
-		return t.(int64)	
-	case int64:
-	    return t
+		return t.(int64)
+	case string:
+		value, err := strconv.ParseInt(t, 10, 64)
+	    if err!=nil {
+	    	return value
+	    } else {
+	    	return 0
+	    }	    
+	case float64:
+	    return int64(t)
 	case int:
-	    return int64(t) 
+	    return int64(t)
+	case int64:
+	    return t 
 	}
 }
 
@@ -29,6 +41,15 @@ func ToInt(t interface{}) int {
 	switch t := t.(type) {
 	default:
 		return t.(int)
+	case string:
+		value, err := strconv.Atoi(t)
+	    if err!=nil {
+	    	return value
+	    } else {
+	    	return 0
+	    }	    
+	case float64:
+	    return int(t)
 	case int:
 	    return t
 	case int64:
@@ -48,6 +69,7 @@ func ToRect(json map[string]interface{}) *stripack.Rect {
 	}
 	return nil
 }
+
 
 func ToRects(json []map[string]interface{}) []*stripack.Rect {
 	res := []*stripack.Rect{}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+	"fmt"
 	"github.com/guregodevo/stripack"
 	"github.com/guregodevo/pastis"
 	"strconv"
@@ -79,7 +80,42 @@ func (resource *DashboardChartsResource) Post(values url.Values, chart Chart) (i
 	return http.StatusOK, chart
 }
 
-func (resource *DashboardChartsResource) Delete(values url.Values, chart Chart) (int64, interface{}) {
+func (resource *DashboardChartsResource) Put(values url.Values, chart map[string]interface{}) (int64, interface{}) {
+	id := values.Get("dashboardid")
+	chartid := values.Get("chartid")
+
+	dashboard, status, msg := resource.validate(id)
+	if msg != "" {
+		error := &ChartsError{time.Now(), msg}
+		return status, pastis.ErrorResponse(error)	
+	}
+
+	chartidInt, errConv := strconv.ParseInt(chartid,10, 64);
+	if  errConv != nil {
+		return http.StatusBadRequest, "Wrong chart id parameter type. Expected integer"
+	}
+	
+	//Update chart
+	rect := ToRect(chart)
+	charts := dashboard.Charts  
+	for _, r := range dashboard.Charts {		
+		if r["id"] == chartidInt {
+			r["col"] = rect.X
+			r["row"] = rect.Y
+			r["sizeY"] = rect.H
+			r["sizeX"] = rect.W
+		}
+	}
+
+	err := resource.DashboardRepository.Update(dashboard.Id, 10, 5, charts)
+	if err!=nil {
+        e := &ChartsError{time.Now(), "Could not save packed chart."}		
+		return http.StatusInternalServerError, pastis.ErrorResponse(e)
+	}
+	return http.StatusOK, nil
+}
+
+func (resource *DashboardChartsResource) Delete(values url.Values) (int64, interface{}) {
 	id := values.Get("dashboardid")
 	chartid := values.Get("chartid")
 

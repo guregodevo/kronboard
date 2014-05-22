@@ -64,6 +64,24 @@ function($q, $http) {
 		return deferred.promise;
 	}
 
+	//Put a chart 
+	function putchart(dashboardid, id, sizeX, sizeY, row, col) {
+		var deferred = $q.defer();
+		var chart = {
+			"id"	: id,
+			"sizeX" : sizeX,
+			"sizeY" : sizeY,
+			"row"   : row,
+			"col"   : col
+		};		
+		$http.put(server + '/dashboards/'+ dashboardid +'/chart/'+id, chart).success(function(data, status) {
+			deferred.resolve(data);
+		}).error(function(data, status) {
+			deferred.reject(status);
+		});
+		return deferred.promise;
+	}
+
 	//Delete a chart from  a collection of charts
 	function deletechart(dashboardid, id) {
 		var deferred = $q.defer();
@@ -101,7 +119,8 @@ function($q, $http) {
 		getcharts : getcharts,
 		getchart : getchart,
 		addchart : addchart,
-		deletechart	: deletechart
+		deletechart	: deletechart,
+		putchart : putchart,
 	};	
 }]);
 
