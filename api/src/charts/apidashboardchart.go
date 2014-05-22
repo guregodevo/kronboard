@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-	"fmt"
+	//"fmt"
 	"github.com/guregodevo/stripack"
 	"github.com/guregodevo/pastis"
 	"strconv"
@@ -94,7 +94,7 @@ func (resource *DashboardChartsResource) Put(values url.Values, chart map[string
 	if  errConv != nil {
 		return http.StatusBadRequest, "Wrong chart id parameter type. Expected integer"
 	}
-	
+
 	//Update chart
 	rect := ToRect(chart)
 	charts := dashboard.Charts  

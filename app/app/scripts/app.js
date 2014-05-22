@@ -64,7 +64,7 @@ function($routeProvider, $httpProvider) {
 		auth : false,
 		templateUrl : 'views/chart.html',
 		controller : 'EditChartCtrl'
-	}).when('/dashboards', {
+	}).when('/dashboards/:id', {
 		auth : false,
 		templateUrl : 'views/dashboards.html',
 		controller : 'DashboardCtrl'

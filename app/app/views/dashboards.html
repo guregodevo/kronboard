@@ -1,7 +1,7 @@
 <ng-include src="'views/inc/menu_dashboard.html'"></ng-include>
 
 <div>
-	<div gridster="gridsterOpts" class="gridster-container">
+	<div gridster="gridsterOpts" class="gridster-container" ng-click="addchart($event)">
 		<ul>
 			<li gridster-item="chart" ng-repeat="chart in charts">
 					<div mychart chartid="{{chart.id}}" dashboardid="{{dashboardid}}" on-close="hideDialog()" type="{{chart.type}}" readonly="{{readonly}}"></div>

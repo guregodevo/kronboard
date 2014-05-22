@@ -14,7 +14,7 @@ function($scope, $http, $window, AuthApi, $location) {
 			console.log('Authentication successfull: store token: ' + data.token);
 			$window.sessionStorage.token = data.token;
 			console.log('go to dashboards page');
-			$location.path('/dashboards');
+			$location.path('/dashboards/1');
 		}, function(status) {//failed
 			delete $window.sessionStorage.token;
 			// Handle login errors here
@@ -32,7 +32,7 @@ function($scope, $http, $window, AuthApi, $location) {
 			console.log('Authentication successfull: store token: ' + data.token);
 			$window.sessionStorage.token = data.token;
 			console.log('go to dashboards page');
-			$location.path('/dashboards');
+			$location.path('/dashboards/1');
 		}, function(status) {//failed
 			delete $window.sessionStorage.token;
 			// Handle login errors here
@@ -65,7 +65,7 @@ function($scope, $routeParams, $http, $window, ChartApi, $location) {
 			}
 			console.log('Chart added' + data.id);
 			console.log('go to dashboards page');
-			$location.path('/dashboards');
+			$location.path('/dashboards/'+$scope.dashboardid);
 		}, function(status) {//failed
 			console.log('Chart could not be added');
 		});
@@ -88,12 +88,14 @@ function($scope, $routeParams, $http, $window, ChartApi, $location) {
 	});
 }]);
 
-offlineControllers.controller('DashboardCtrl', ['$scope', '$http', '$timeout', 'ChartApi',
-function($scope, $http, $timeout, ChartApi) {
-	//$scope.readonly = false;
-	$scope.dashboardid = 1;
+offlineControllers.controller('DashboardCtrl', ['$scope', '$routeParams', '$location', '$http', '$timeout', 'ChartApi',
+function($scope, $routeParams, $location, $http, $timeout, ChartApi) {
 	$scope.dragging = true;
 	$scope.changeditems= [];
+	$scope.dashboardid = $routeParams.id
+	$scope.addchart = function($event){ 
+		$location.path('/dashboard/'+$scope.dashboardid+'/chart/');
+    }
 
 	$scope.gridsterOpts = {
 		margins : [5, 5],
@@ -110,7 +112,7 @@ function($scope, $http, $timeout, ChartApi) {
 					var dashboardid = e.getAttribute('dashboardid');
 					if (chartid && dashboardid) {
 						console.log('changed item:' + $scope.changeditems.length);
-						var item; 
+						var item;
 					    for (var i = 0; i < $scope.changeditems.length; i++) {
 							if ($scope.changeditems[i].id == chartid) {
 								item = $scope.changeditems[i];
