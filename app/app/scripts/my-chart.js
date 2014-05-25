@@ -57,6 +57,7 @@ function($location, $interval, $timeout, $window, $rootScope, ChartApi) {
 					console.log('Get charts service failed');
 				});
 		      }, 200);
+		      return false
 			};
 
 			$scope.edit = function() {

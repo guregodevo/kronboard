@@ -1,6 +1,6 @@
 <span ng-mouseenter="editable = true" ng-mouseleave="editable = false" >
-<a href ng-show="editable" class="graphbtn" ng-click="refresh()" alt="refresh" style="position:absolute;left:10px;">&#10227;</a>
-<a href ng-show="editable && !readonly" class="graphbtn" ng-click="close()" alt="remove" style="position:absolute;right:0px;" >&#10005;</a>
-<a href ng-show="editable && !readonly" class="graphbtn" ng-click="edit()" alt="edit" style="position:absolute;right:20px;">&#9998;</a>
+<a href ng-show="editable" class="graphbtn" ng-click="$event.stopPropagation();refresh();$event.stopPropagation();" alt="refresh" style="position:absolute;left:10px;">&#10227;</a>
+<a href ng-show="editable && !readonly" class="graphbtn" ng-click="$event.stopPropagation();close();$event.stopPropagation();" alt="remove" style="position:absolute;right:0px;" >&#10005;</a>
+<a href ng-show="editable && !readonly" class="graphbtn" ng-click="edit();$event.stopPropagation();" alt="edit" style="position:absolute;right:20px;">&#9998;</a>
 <div class="chart"></div>
 </span>

@@ -96,7 +96,7 @@ function($q, $http) {
 	//Get a collection of charts
 	function getchart(id) {
 		var deferred = $q.defer();
-		$http.get(server + '/charts?id='+id, {}).success(function(data, status) {
+		$http.get(server + '/charts/'+id, {}).success(function(data, status) {
 			deferred.resolve(data);
 		}).error(function(data, status) {
 			deferred.reject(status);
@@ -107,7 +107,7 @@ function($q, $http) {
 	//Get a collection of charts
 	function getcharts() {
 		var deferred = $q.defer();
-		$http.get(server + '/dashboards?id=1', {}).success(function(data, status) {
+		$http.get(server + '/dashboards/1', {}).success(function(data, status) {
 			deferred.resolve(data);
 		}).error(function(data, status) {
 			deferred.reject(status);
