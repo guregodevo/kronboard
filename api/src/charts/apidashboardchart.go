@@ -16,6 +16,11 @@ type DashboardChartsResource struct{
 	DashboardRepository *DashboardRepository
 }
 
+const (
+	DASHBOARD_HEIGHT = 10
+	DASHBOARD_WIDTH = 5
+)
+
 func (resource DashboardChartsResource) validate(id string) (*Dashboard, int64, string) {
 	if id == "" {		
 		return nil, http.StatusBadRequest, "Missing dashboard id parameter"
@@ -66,13 +71,13 @@ func (resource *DashboardChartsResource) Post(values url.Values, chart Chart) (i
 	rects := ToRects(dashboard.Charts)
 	algo := new(stripack.GreedyOnlineAlgo)
 	rect := &stripack.Rect{Id:chart.Id, H:1, W:1}
-	isPacked, packedRect := algo.Pack(6,5, rects, rect)
+	isPacked, packedRect := algo.Pack(DASHBOARD_HEIGHT,DASHBOARD_WIDTH, rects, rect)
 	if  !isPacked {
         err := &ChartsError{time.Now(), "Could not pack your chart due to lack of space."}		
 		return http.StatusBadRequest, pastis.ErrorResponse(err)
 	}
 	charts := append(dashboard.Charts, ToJSON(chart, packedRect))
-	err = resource.DashboardRepository.Update(dashboard.Id, 10, 5, charts)
+	err = resource.DashboardRepository.Update(dashboard.Id, DASHBOARD_HEIGHT, DASHBOARD_WIDTH, charts)
 	if err!=nil {
         e := &ChartsError{time.Now(), "Could not save packed chart."}		
 		return http.StatusInternalServerError, pastis.ErrorResponse(e)
@@ -107,7 +112,7 @@ func (resource *DashboardChartsResource) Put(values url.Values, chart map[string
 		}
 	}
 
-	err := resource.DashboardRepository.Update(dashboard.Id, 10, 5, charts)
+	err := resource.DashboardRepository.Update(dashboard.Id, DASHBOARD_HEIGHT, DASHBOARD_WIDTH, charts)
 	if err!=nil {
         e := &ChartsError{time.Now(), "Could not save packed chart."}		
 		return http.StatusInternalServerError, pastis.ErrorResponse(e)
@@ -139,7 +144,7 @@ func (resource *DashboardChartsResource) Delete(values url.Values) (int64, inter
 			charts = append(charts, c)
 		}
 	}
-	err := resource.DashboardRepository.Update(dashboard.Id, 10, 5, charts)
+	err := resource.DashboardRepository.Update(dashboard.Id, DASHBOARD_HEIGHT, DASHBOARD_WIDTH, charts)
 	if err!=nil {
         e := &ChartsError{time.Now(), "Could not delete chart."}		
 		return http.StatusInternalServerError, pastis.ErrorResponse(e)

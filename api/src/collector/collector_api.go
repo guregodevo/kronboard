@@ -10,8 +10,6 @@ import (
 type CollectorResource struct {
 }
 
-
-
 type CollectorError struct {
 	When time.Time
 	What string
