@@ -20,6 +20,7 @@ _cgo_export.*
 
 pkg/
 _testmain.go
+src/code.google.com
 src/github.com/
 *.exe
 *.test
