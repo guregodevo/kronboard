@@ -6,12 +6,16 @@ import (
 )
 
 func main() {
-	dec := &collector.EventEncodeDecoder{}
+	codec := &collector.EventEncodeDecoder{}
 	queue := &collector.EventQueue{}
+	e := queue.Connect("localhost:11300")
+	if e != nil {
+		log.Fatal(e)
+	}
 
 	for {
 		if p, err := queue.Read(); err == nil && p != nil {
-		   e, event :=	dec.Decode(p)
+		   e, event :=	codec.Decode(p)
 		   if e == nil {
 		   		log.Printf("Recieved : %v \n", event)
 		   }

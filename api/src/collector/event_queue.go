@@ -8,33 +8,32 @@ import (
 
 
 type EventQueue struct {
+    conn *gobeanstalk.Conn
 }
 
+func (q *EventQueue) Connect(url string) (err error) {
+    conn, err := gobeanstalk.Dial(url)
+    if err != nil {
+        log.Printf("connect failed")
+    } else {
+        q.conn = conn
+    }
+    return err
+}
 
 func (q *EventQueue) Write(p []byte) (id uint64, err error) {
-	conn, err := gobeanstalk.Dial("localhost:11300")
-    if err != nil {
-        return 0, err
-    }
-
-    id, err = conn.Put(p, 0, 0, 10)
+    id, err = q.conn.Put(p, 0, 0, 10)
     return id, err
 }
 
 func (q *EventQueue) Read() (p []byte, err error) {
-	conn, err := gobeanstalk.Dial("localhost:11300")
-    if err != nil {
-        log.Printf("connect failed")
-        return nil, err
-    }
-
-    j, err := conn.Reserve()
+    j, err := q.conn.Reserve()
     if err != nil {
         log.Println("reserve failed")
         return nil, err
     }
-    log.Printf("id:%d \n", j.Id)
-    err = conn.Delete(j.Id)
+    //log.Printf("id:%d \n", j.Id)
+    err = q.conn.Delete(j.Id)
     if err != nil {
         return nil, err
     }

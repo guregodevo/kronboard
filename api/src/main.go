@@ -40,7 +40,10 @@ func main() {
 	dashboardChartsResource.ChartRepository = &charts.ChartRepository{&sqlDB}
 	dashboardChartsResource.DashboardRepository = &charts.DashboardRepository{&sqlDB}
 
-	collectorResource := new(collector.CollectorResource)
+	collectorResource, e := collector.NewCollectorResource("localhost:11300")
+	if e != nil {
+		log.Fatal(e)
+	}
 
 	var api = pastis.NewAPI()
 	api.AddFilter(pastis.LoggingFilter)
