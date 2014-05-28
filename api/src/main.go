@@ -4,7 +4,6 @@ import (
 	"analytics"
 	"auth"
 	"charts"
-	"collector"
 	"fmt"
 	"log"
 	"redigowrapper"
@@ -40,11 +39,6 @@ func main() {
 	dashboardChartsResource.ChartRepository = &charts.ChartRepository{&sqlDB}
 	dashboardChartsResource.DashboardRepository = &charts.DashboardRepository{&sqlDB}
 
-	collectorResource, e := collector.NewCollectorResource("localhost:11300")
-	if e != nil {
-		log.Fatal(e)
-	}
-
 	var api = pastis.NewAPI()
 	api.AddFilter(pastis.LoggingFilter)
 	api.AddFilter(pastis.CORSFilter)
@@ -53,7 +47,6 @@ func main() {
 	api.AddResource("/charts/:id", chartsResource)
 	api.AddResource("/dashboards/:id", dashboardsResource)
 	api.AddResource("/dashboards/:dashboardid/chart/(?P<chartid>[0-9]*)$", dashboardChartsResource)
-	api.AddResource("/events", collectorResource)
 
 	log.Printf("Listening on 3000. Go to http://127.0.0.1:3000/")
 	err := api.Start(3000)
