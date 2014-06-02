@@ -1,7 +1,6 @@
 package main
 
 import (
-	"analytics"
 	"auth"
 	"charts"
 	"fmt"
@@ -27,8 +26,6 @@ func main() {
 	authResource := new(auth.AuthenticationResource)
 	authResource.Service = authServiceDomain
 
-	metricsResource := new(analytics.MetricsResource)
-
 	dashboardsResource := new(charts.DashboardsResource)
 	dashboardsResource.Repository = &charts.DashboardRepository{&sqlDB}
 
@@ -43,7 +40,6 @@ func main() {
 	api.AddFilter(pastis.LoggingFilter)
 	api.AddFilter(pastis.CORSFilter)
 	api.AddResource("/authenticate", authResource)
-	api.AddResource("/metrics", metricsResource)
 	api.AddResource("/charts/:id", chartsResource)
 	api.AddResource("/dashboards/:id", dashboardsResource)
 	api.AddResource("/dashboards/:dashboardid/chart/(?P<chartid>[0-9]*)$", dashboardChartsResource)
