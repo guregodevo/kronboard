@@ -15,7 +15,7 @@ func main() {
 
 	for {
 		if p, err := queue.Read(); err == nil && p != nil {
-		   e, event :=	codec.Decode(p)
+		   event, e :=	codec.Decode(p)
 		   if e == nil {
 		   		log.Printf("Recieved : %v \n", event)
 		   }

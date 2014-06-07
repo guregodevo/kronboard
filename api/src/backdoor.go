@@ -3,6 +3,7 @@ package main
 
 import (
 	"auth"
+	"metrics"
 	"charts"
 	"flag"
 	"fmt"
@@ -47,7 +48,7 @@ func main() {
 		nativedb := db.Opendb()
 		defer nativedb.Close()
 
-		rows := db.Query("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'")
+		rows, _ := db.Query("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'")
 		for rows.Next() {
 			var tablename string
 			err := rows.Scan(&tablename)
@@ -61,12 +62,12 @@ func main() {
 		defer sqldb.Close()
 		fmt.Printf("creating USER_ACCOUNT... \n")
 		db.Exec("CREATE TABLE USER_ACCOUNT(ID SERIAL PRIMARY KEY NOT NULL, EMAIL VARCHAR(50) NOT NULL, COMPANY_NAME VARCHAR(50) NOT NULL, PASSWORD VARCHAR(15) NOT NULL, CREATED TIMESTAMP NOT NULL);")
-		//db.Exec("CREATE TABLE METRICS( time timestamp NOT NULL, values HSTORE );")
 		fmt.Printf("creating DASHBOARD_ACCOUNT... \n")
 		db.Exec("CREATE TABLE DASHBOARD(ID SERIAL, WIDTH SMALLINT, HEIGHT SMALLINT, NAME VARCHAR(100), CHARTS hstore[], CREATED TIMESTAMP NOT NULL );")
 		fmt.Printf("creating CHART_ACCOUNT... \n")
 		db.Exec("CREATE TABLE CHART(ID SERIAL, INTERVAL SMALLINT, TYPE VARCHAR(100), DESCRIPTION VARCHAR(100), CREATED TIMESTAMP NOT NULL );")
-
+		fmt.Printf("creating METRIC TABLE... \n")
+		db.Exec("CREATE TABLE METRICS(ID SERIAL, CLIENTID VARCHAR(100), DIMENSION VARCHAR(100), FILTERS HSTORE, GROUPS TEXT[]);")	
 
 	case "d":
 		fmt.Printf("dropping tables... \n")
@@ -76,7 +77,11 @@ func main() {
 		db.Exec("DROP TABLE USER_ACCOUNT;")
 		db.Exec("DROP TABLE DASHBOARD;")
 		db.Exec("DROP TABLE CHART;")
-
+		repoMetrics := metrics.MetricRepository{&db}
+		log.Printf("Drop all Metrics ")
+		repoMetrics.DeleteAllMetrics()
+		db.Exec("DROP TABLE METRICS;")
+		
 	case "p":
 		fmt.Printf("provisioning tables... \n")
 		sqldb := db.Opendb()
@@ -143,7 +148,13 @@ func main() {
 		repoChart.Create(2,"line","My Line chart")
 		repoChart.Create(1,"bar", "My Bar chart")
 
+		query := metrics.NewQuery("visitid")
+		query.Filter("type","social_action")
+		query.GroupBy("browser")
 
+		repoMetrics := metrics.MetricRepository{&db}
+		log.Printf("Created Metric [query=%v]", query)
+		repoMetrics.CreateMetric("123", query)
 
 	case "q":
 		fmt.Printf("running a few queries... \n")
@@ -168,9 +179,6 @@ func main() {
 		if errD == nil {
 			log.Printf(chartOne.String())
 		}
-
-
-
 	case "r":
 		acc := new(auth.Account)
 		acc.Id = 1

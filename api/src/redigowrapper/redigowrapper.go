@@ -58,6 +58,26 @@ func (db *RedisDB) Url() string {
 //}
 
 //Executes a Redis command.
+func (db *RedisDB) Values(cmd string, args ...interface{}) ([]interface{}, error) {
+	return redis.Values(db.ExecRedis(cmd,args...))
+}
+
+func (db *RedisDB) Slices(cmd string, args ...interface{}) ([]string, error) {
+	values, err := db.Values(cmd, args...)
+	if err != nil {
+		return []string{}, err
+	}
+	var r []string
+
+	if e := redis.ScanSlice(values, &r); e != nil {
+	    return []string{}, err
+	}
+	return r, nil
+}
+
+
+
+//Executes a Redis command.
 func (db *RedisDB) ExecRedis(cmd string, args ...interface{}) (interface{}, error) {
 	allArgs := append([]interface{}{cmd}, args...)
 	log.Printf("Redis '%v' args=", allArgs...)
