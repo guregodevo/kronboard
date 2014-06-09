@@ -1,18 +1,17 @@
 package collector
 
 import (
-	//"code.google.com/p/goprotobuf/proto"	
 	"fmt"
 	"net/http"
 	"net/url"
 	"time"
 	"log"
-	//"github.com/dataence/ringbuffer"
+	"core"
 )
 
 type CollectorResource struct {
 	queue *EventQueue
-	codec *EventEncodeDecoder
+	codec *core.EventEncodeDecoder
 }
 
 type CollectorError struct {
@@ -21,7 +20,7 @@ type CollectorError struct {
 }
 
 func NewCollectorResource(url string) (*CollectorResource, error ){
-	codec := &EventEncodeDecoder{}
+	codec := &core.EventEncodeDecoder{}
 	queue := &EventQueue{}
 	err := queue.Connect(url)
 	return &CollectorResource{queue, codec}, err

@@ -1,4 +1,4 @@
-package collector
+package core
 
 import (
 	//"code.google.com/p/goprotobuf/proto"	

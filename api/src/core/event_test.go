@@ -1,5 +1,4 @@
-package collector
-
+package core
 
 import (
 	"testing"

@@ -3,6 +3,7 @@ package metrics
 import (
 	"fmt"
 	"time"
+	"core"
 	_ "github.com/lib/pq"
 	"github.com/guregodevo/gosequel"
 )
@@ -20,18 +21,25 @@ type Event struct {
 const (
 	INSERT_METRIC		  				= "INSERT INTO METRICS(CLIENTID, DIMENSION, FILTERS, GROUPS) values ($1, $2, $3, $4 ) RETURNING ID"	
 	SELECT_METRIC		  				= "SELECT ID, CLIENTID, DIMENSION, FILTERS, GROUPS FROM METRICS"										   
-
+	HLL_TABLE_NAME						= "hll_%s_%d"
 	SELECT_METRICS_TABLE  				= "SELECT count(*) FROM information_schema.tables WHERE table_name = 'hll_%s_%d'"	
 	CREATE_METRICS_TABLE  				= "CREATE TABLE hll_%s_%d (date date, visit_id hll);"
+	CREATE_METRICS_TABLE_GROUP_BY		= "CREATE TABLE hll_%s_%d (date date, group varchar, visit_id hll);"	
     DROP_METRICS_TABLE  				= "DROP TABLE IF EXISTS hll_%s_%d ;"	
 	METRICS_EVENT_INSERT                = "INSERT INTO hll_%s_%d(date, visit_id) SELECT $1, hll_add_agg(hll_hash_text($2) )"
+	METRICS_EVENT_INSERT_GROUP_BY       = "INSERT INTO hll_%s_%d(date, visit_id, group) SELECT $1, hll_add_agg(hll_hash_text($2)), $3"
 	METRICS_VISIT_SELECT_TIMESERIES     = "SELECT %s, hll_cardinality(hll_union_agg(visit_id)) FROM hll_%s_%d GROUP BY 1"
 	METRICS_VISIT_SELECT     			= "SELECT %s hll_cardinality(hll_union_agg(visit_id)) FROM hll_%s_%d %s GROUP BY %d"
 )
 
+func TableName(m Metric) string {
+	return fmt.Sprintf(HLL_TABLE_NAME,m.ClientId, m.Id)	
+}
+
 func (repo *MetricRepository) DeleteAllMetrics() (error) {
 	metrics, e := repo.GetAllMetric()
 	for _, m := range metrics {
+
 		dropTable := fmt.Sprintf(DROP_METRICS_TABLE,m.ClientId, m.Id)
 		_, e = repo.Db.Exec(dropTable)
 	}
@@ -74,7 +82,12 @@ func (repo *MetricRepository) createMetricTable(id int64, clientId string, query
 	err := repo.Db.QueryRow(selectTable, 0, &count)
 	//fmt.Printf("count : %s \n", count)
 	if count == 0 {
-		createTable := fmt.Sprintf(CREATE_METRICS_TABLE,clientId, id)
+		var createTable string
+		if query.HasGroup() {
+			createTable = fmt.Sprintf(CREATE_METRICS_TABLE_GROUP_BY, clientId, id)
+		} else {
+			createTable = fmt.Sprintf(CREATE_METRICS_TABLE, clientId, id)	
+		}
 		_, err = repo.Db.Exec(createTable)
 	}
 	return err
@@ -82,17 +95,27 @@ func (repo *MetricRepository) createMetricTable(id int64, clientId string, query
 
 func (repo *MetricRepository) insertMetric(clientId string, query *QueryDef) (int64, error) {
 	filters := repo.Db.HStoreToString( query.Filters )
-	fmt.Print(filters)
+	//fmt.Print(filters)
 	groups := repo.Db.ArrayToString(query.Groups)
-	fmt.Print(groups)
+	//fmt.Print(groups)
 	var id int64
 	err := repo.Db.QueryRow(INSERT_METRIC, 4, clientId, query.Dimension, filters, groups, &id)
 	return id, err
 }
 
-func (repo *MetricRepository) InsertEvent(clientId string, metricsId int64, dimensionValue string) {
-	insertQuery := fmt.Sprintf(METRICS_EVENT_INSERT, clientId, metricsId)
-	repo.Db.Exec(insertQuery, time.Now(), dimensionValue)
+func (repo *MetricRepository) InsertEvent(m Metric, event core.Event) {
+	if m.Query.match(event) {
+		var insertQuery string
+		dimensionValue := event[m.Query.Dimension]
+		if m.Query.HasGroup() {
+			groupByValue := m.Query.GroupByValue(event)
+			insertQuery = fmt.Sprintf(METRICS_EVENT_INSERT_GROUP_BY, m.ClientId, m.Id)
+			repo.Db.Exec(insertQuery, time.Now(), dimensionValue, groupByValue)			
+		} else {
+			insertQuery = fmt.Sprintf(METRICS_EVENT_INSERT, m.ClientId, m.Id)	
+			repo.Db.Exec(insertQuery, time.Now(), dimensionValue)
+		}		
+	}
 }
 
 func (repo *MetricRepository) MetricQuery(clientId int, metricsId int, query QueryDef) (error) {

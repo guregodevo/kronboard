@@ -1,8 +1,8 @@
 package main
 
 import (
-	"collector"
 	"log"
+	"core"
 	"metrics"
 	"github.com/guregodevo/gosequel"
 	"redigowrapper"
@@ -13,7 +13,7 @@ import (
 func poll(now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
 	fmt.Printf("%v: Polling ...", now)
 
-	codec := &collector.EventEncodeDecoder{}
+	codec := &core.EventEncodeDecoder{}
 	
 	repo := metrics.MetricRepository{db}
 
@@ -34,7 +34,7 @@ func poll(now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
 			if e != nil {
 				continue
 			} 
-			repo.InsertEvent(metric.ClientId, metric.Id, event[metric.Query.Dimension])
+			repo.InsertEvent(metric, event)
 		}
 	}	
 }

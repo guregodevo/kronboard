@@ -1,14 +1,15 @@
 package collector
 
+import "core"
 
 // See http://pivotallabs.com/a-concurrent-ring-buffer-for-go/
 
 type RingBuffer struct {
-    inputChannel  <-chan Event
-    outputChannel chan Event
+    inputChannel  <-chan core.Event
+    outputChannel chan core.Event
 }
 
-func NewRingBuffer(inputChannel <-chan Event, outputChannel chan Event) *RingBuffer {
+func NewRingBuffer(inputChannel <-chan core.Event, outputChannel chan core.Event) *RingBuffer {
     return &RingBuffer{inputChannel, outputChannel}
 }
 
