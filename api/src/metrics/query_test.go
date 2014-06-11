@@ -25,7 +25,7 @@ func refute(t *testing.T, a interface{}, b interface{}) {
 
 func TestQueryMatching(t *testing.T)  {
 	event := core.Event  {
-		"id" : "1",
+		"visitid" : "1",
 		"timestamp" : "1402068401",
 		"deviceType" : "Samsung",
 		"browser" : "firefox",

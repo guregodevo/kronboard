@@ -1,6 +1,7 @@
 package main
 
 import (
+	"core"
 	"collector"
 	"redigowrapper"
 	"log"
@@ -9,10 +10,9 @@ import (
 	"github.com/guregodevo/pastis"
 )
 
-func index(out chan collector.Event, redisDB *redigowrapper.RedisDB, codec *collector.EventEncodeDecoder) {
+func index(out chan core.Event, redisDB *redigowrapper.RedisDB, codec *core.EventEncodeDecoder) {
 	for event := range out {
-	    fmt.Println("%v to indexToRedis", event)
-		data, errEnc := codec.EncodeBase64(event)
+	    data, errEnc := codec.EncodeBase64(event)
 		if errEnc != nil {
 			fmt.Print("Error encoding base 64")
 			continue
@@ -21,15 +21,15 @@ func index(out chan collector.Event, redisDB *redigowrapper.RedisDB, codec *coll
     }
 }
 
-func S3(out chan collector.Event) {
+func S3(out chan core.Event) {
 	for event := range out {
 	    fmt.Println("%v toS3", event)
     }	
 }
 
-func broadcast(out chan collector.Event, db *redigowrapper.RedisDB, codec *collector.EventEncodeDecoder) {
-	chanIndex := make(chan collector.Event, 5)
-	chanS3 := make(chan collector.Event, 5)
+func broadcast(out chan core.Event, db *redigowrapper.RedisDB, codec *core.EventEncodeDecoder) {
+	chanIndex := make(chan core.Event, 5)
+	chanS3 := make(chan core.Event, 5)
 
 	go index(chanIndex, db, codec)
 	go S3(chanS3)
@@ -43,7 +43,7 @@ func main() {
 	runtime.GOMAXPROCS(1)
 	c := collector.NewChannelCollectorResource()
 
-	codec := &collector.EventEncodeDecoder{}
+	codec := &core.EventEncodeDecoder{}
     //db := gosequel.DataB{"postgres", "localhost", "postgres", "postgres", "miranalytics", nil}
 	//fmt.Printf("SQL Database - %v\n", db.Url())
 

@@ -13,8 +13,6 @@ import (
 func poll(now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
 	fmt.Printf("%v: Polling ...", now)
 
-	codec := &core.EventEncodeDecoder{}
-	
 	repo := metrics.MetricRepository{db}
 
 	metrics, err := repo.GetAllMetric()
@@ -24,19 +22,12 @@ func poll(now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
 	}
 
 	for _, metric := range metrics {
-		eventsAsString, rerr := redisDB.Slices("ZRANGEBYSCORE", metric.ClientId, "-inf", "+inf")
+		repo.
 		if rerr != nil {
     		log.Printf("Error : %v \n", rerr)
 			continue
 		}
-		for _, eventAstring := range eventsAsString {
-			fmt.Printf("Decode %v",eventAstring )
-			event, e :=	codec.DecodeBase64(eventAstring)
-			if e != nil {
-				continue
-			} 
-			repo.InsertEvent(metric, event)
-		}
+		
 	}	
 }
 
@@ -51,9 +42,6 @@ func main() {
 	nativedb := db.Opendb()
 	defer nativedb.Close()
 
-	t := time.NewTicker(5 * time.Second)
-	for now := range t.C {
-    	poll(now, &redisDB, &db)
-	}
+   	poll(time.Now(), &redisDB, &db)
 
 }
