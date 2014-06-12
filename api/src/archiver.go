@@ -10,11 +10,9 @@ import (
 	"fmt"
 )
 
-func poll(now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
+func index(now time.Time, db *gosequel.DataB) {
 	fmt.Printf("%v: Polling ...", now)
 
-	codec := &core.EventEncodeDecoder{}
-	
 	repo := metrics.MetricRepository{db}
 
 	metrics, err := repo.GetAllMetric()
@@ -24,15 +22,27 @@ func poll(now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
 	}
 
 	for _, metric := range metrics {
+		repo.IndexMetric(metric)
+	}	
+}
+
+
+func ingest(clientIds []string, now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
+	fmt.Printf("%v: Polling ...", now)
+
+	codec := &core.EventEncodeDecoder{}
+	
+	repo := metrics.MetricRepository{db}
+
+	for _, clientId := range clientIds {
 		for {
-			eventString, rerr := redisDB.String("LPOP", metric.ClientId)
+			eventString, rerr := redisDB.String("LPOP", clientId)
 			if rerr != nil {
 				break
 			}
-			//fmt.Printf("Decode %v",eventAstring )
 			event, e :=	codec.DecodeBase64(eventString)
 			if e == nil && event !=nil {
-				repo.InsertEvent(metric, event)
+				repo.InsertEvent(clientId, event)
 			}
 		}
 	}	
@@ -50,8 +60,10 @@ func main() {
 	defer nativedb.Close()
 
 	t := time.NewTicker(5 * time.Second)
+	clients := []string { "123" }
 	for now := range t.C {
-    	poll(now, &redisDB, &db)
+    	ingest(clients, now, &redisDB, &db)
+    	index(now, &db)
 	}
 
 }
