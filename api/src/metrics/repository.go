@@ -29,7 +29,6 @@ const (
     DROP_METRICS_TABLE  				= "DROP TABLE IF EXISTS hll_%s_%d ;"	
 	METRICS_EVENT_INSERT                = "INSERT INTO hll_%s_%d(date, visit_id) SELECT $1, hll_add_agg(hll_hash_text($2) )"
 	METRICS_EVENT_INSERT_GROUP_BY       = "INSERT INTO hll_%s_%d(date, visit_id, groups) SELECT $1, hll_add_agg(hll_hash_text($2)), $3"
-	//METRICS_VISIT_SELECT_TIMESERIES     = "SELECT %s, hll_cardinality(hll_union_agg(visit_id)) FROM hll_%s_%d GROUP BY 1"
 	METRICS_VISIT_SELECT     			= "SELECT %s hll_cardinality(hll_union_agg(visit_id)) FROM hll_%s_%d %s"
 )
 
@@ -55,8 +54,8 @@ func (repo *MetricRepository) GetAllMetric() ([]Metric, error) {
         return []Metric {} , err
     }	
     for rows.Next() {
-            var id int64
-            var pclientId, pdimension, pfilters, pgroups string
+			var id int64
+			var pclientId, pdimension, pfilters, pgroups string
             if err := rows.Scan(&id, &pclientId, &pdimension, &pfilters, &pgroups); err != nil {
                 return []Metric {} , err
             }

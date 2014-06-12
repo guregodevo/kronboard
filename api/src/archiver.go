@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+//	"log"
 	"core"
 	"metrics"
 	"github.com/guregodevo/gosequel"
@@ -24,18 +24,16 @@ func poll(now time.Time, redisDB *redigowrapper.RedisDB, db *gosequel.DataB) {
 	}
 
 	for _, metric := range metrics {
-		eventsAsString, rerr := redisDB.Slices("ZRANGEBYSCORE", metric.ClientId, "-inf", "+inf")
-		if rerr != nil {
-    		log.Printf("Error : %v \n", rerr)
-			continue
-		}
-		for _, eventAstring := range eventsAsString {
-			fmt.Printf("Decode %v",eventAstring )
-			event, e :=	codec.DecodeBase64(eventAstring)
-			if e != nil {
-				continue
-			} 
-			repo.InsertEvent(metric, event)
+		for {
+			eventString, rerr := redisDB.String("LPOP", metric.ClientId)
+			if rerr != nil {
+				break
+			}
+			//fmt.Printf("Decode %v",eventAstring )
+			event, e :=	codec.DecodeBase64(eventString)
+			if e == nil && event !=nil {
+				repo.InsertEvent(metric, event)
+			}
 		}
 	}	
 }

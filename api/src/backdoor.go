@@ -41,7 +41,6 @@ func main() {
 		fmt.Printf("How to update '%v' password? \n", db.User)
 		fmt.Printf("ALTER USER %v WITH PASSWORD '<new Password>'; \n", db.User)
 
-		//	fmt.Printf("Tips: Password = postgres / sudo -u postgres createdb -h localhost -U postgres miranalytics")
 	case "l":
 		fmt.Printf("listing the databases table available...\n")
 		// "sudo -u postgres psql -l"

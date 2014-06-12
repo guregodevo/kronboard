@@ -47,7 +47,8 @@ func (q *QueryDef) matchingGroups(event core.Event) []string {
 	for k, _ := range event {
 		for _, kG := range q.Groups {
 			if k == kG {
-				groups = append(groups, k)
+				println(event[k])
+				groups = append(groups, event[k])
 			}
 		}
 	}

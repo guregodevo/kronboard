@@ -17,7 +17,7 @@ func index(out chan core.Event, redisDB *redigowrapper.RedisDB, codec *core.Even
 			fmt.Print("Error encoding base 64")
 			continue
 		}
-		redisDB.ExecRedis("ZADD", event["clientid"], event["timestamp"], data)
+		redisDB.ExecRedis("LPUSH", event["clientid"], data)
     }
 }
 
